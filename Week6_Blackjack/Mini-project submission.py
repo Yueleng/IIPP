@@ -160,7 +160,7 @@ def hit():
    
     # if busted, assign a message to outcome, update in_play and score
     if player_hand.get_value() <= 21:
-        player_hand.add_card(deck.deal_card)
+        player_hand.add_card(deck.deal_card())
         if player_hand.get_value() > 21:
             outcome = "You have busted."
             score -= 1
@@ -178,7 +178,7 @@ def stand():
     global score, dealer_print, in_play, outcome, message
     dealer_print = True
     if in_play:
-        if hand.get_value() > 21:
+        if player_hand.get_value() > 21:
             score -=1
             outcome = "You have busted"
         else:
@@ -188,7 +188,7 @@ def stand():
             if dealer_hand.get_value() > 21:
                 score += 1
                 outcome = "Dealer busted, player win!"
-            elif deal_hand.get_value() >= player_hand.get_value():
+            elif dealer_hand.get_value() >= player_hand.get_value():
                 score -= 1
                 outcome = "Dealer win!"
             else:
