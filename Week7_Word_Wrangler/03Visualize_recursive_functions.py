@@ -17,7 +17,7 @@ def collatz(num, count):
     else:
         return collatz(3 * num + 1, count + 1)
     
-print collatz(5, 0)
+#print collatz(5, 0)
 
 
 def quicksort(num_list):
@@ -41,3 +41,4 @@ def quicksort(num_list):
 
 
 
+print("Hello World")
