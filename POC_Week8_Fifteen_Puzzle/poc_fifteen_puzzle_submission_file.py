@@ -1,10 +1,9 @@
 """
-http://www.codeskulptor.org/#user44_HMPPybg6AX_24.py
+http://www.codeskulptor.org/#user44_I8zDYfJQzV_2.py
 
 Loyd's Fifteen puzzle - solver and visualizer
 Note that solved configuration has the blank (zero) tile in upper left
 Use the arrows key to swap this tile with its neighbors
-
 """
 
 import poc_fifteen_gui
@@ -157,40 +156,40 @@ class Puzzle:
         if row == target_row  - 1:
             if col == target_col: 
                 move_string += "uld"
-                return move_string
+                
             elif col > target_col:
                 move_string += "u" + "r" * (col - target_col)
                 move_string += "ulldr" * (col - target_col - 1)
                 move_string += "ullddru"
                 move_string += "ld"
-                return move_string
+                
             elif col < target_col:
                 move_string += "u" + "l" * (target_col - col)
                 move_string += "urrdl" * (target_col - col - 1)
                 move_string += "druld"
-                return move_string
+                
             
         if row == target_row:
             if target_col - col == 1:
                 move_string += "l"
-                return move_string
+                
             else:
                 move_string += "l" * (target_col - col)
                 move_string += "urrdl" * (target_col - col - 1)
-                return move_string
+                
             
         if target_row - row > 1:
             if target_col == col:
                 move_string += "u" * (target_row - row)
                 move_string += "lddru" * (target_row - row - 1)
                 move_string += "ld"
-                return move_string
+                
             elif target_col > col:
                 #left
                 move_string += "u" * (target_row - row) + "l" * (target_col - col)
                 move_string += "drrul" * (target_col - col - 1)
                 move_string += "druld" * (target_row - row)
-                return move_string
+                
             elif target_col < col:
                 #right
                 move_string += "u" * (target_row - row) + "r" * (col - target_col)
@@ -198,7 +197,8 @@ class Puzzle:
                 move_string += "dlu"
                 move_string += "lddru" * (target_row - row - 1)
                 move_string += "ld"
-                return move_string
+        self.update_puzzle(move_string)
+        return move_string
             
     def solve_col0_tile(self, target_row):
         """
@@ -213,11 +213,13 @@ class Puzzle:
             if col == target_col: 
                 move_string += "u" 
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
             elif col - target_col == 1:
                 move_string += "u"
                 move_string += "ruldrdlurdluurddlu"
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
             elif col - target_col >= 2:
                 move_string += "u" + "r" * (col - target_col)
@@ -225,6 +227,7 @@ class Puzzle:
                 move_string += "ulld"
                 move_string += "ruldrdlurdluurddlu"
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
         if target_row - row >= 2:
             if col == target_col:
@@ -232,6 +235,7 @@ class Puzzle:
                 move_string += "druld" * (target_row - row - 2)
                 move_string += "ruldrdlurdluurddlu"
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
                 
             if col - target_col == 1:
@@ -239,6 +243,7 @@ class Puzzle:
                 move_string += "druld" * (target_row - row - 1)
                 move_string += "ruldrdlurdluurddlu"
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
             if col - target_col >= 2:
                 move_string += "u" * (target_row - row) + "r" * (col - target_col)
@@ -247,6 +252,7 @@ class Puzzle:
                 move_string += "druld" * (target_row - row - 1)
                 move_string += "ruldrdlurdluurddlu"
                 move_string += "r" * (self._width - 1)
+                self.update_puzzle(move_string)
                 return move_string
         assert False, "Invalid"
 
@@ -310,23 +316,27 @@ class Puzzle:
         if row == 0:
             if col == target_col - 1:
                 move_string += "ld"
+                self.update_puzzle(move_string)
                 return move_string
             if col <= target_col - 2:
                 move_string += "l" * (target_col - col)
                 move_string += "drrul" * (target_col - col - 2)
                 move_string += "druld"
                 move_string += "urdlurrdluldrruld"
+                self.update_puzzle(move_string)
                 return move_string
         if row == 1:
             if col == target_col - 1:
                 move_string += "lld"
                 move_string += "urdlurrdluldrruld"
+                self.update_puzzle(move_string)
                 return move_string
             if col <= target_col - 2:
                 move_string += "l" * (target_col - col - 1) + "d"
                 move_string += "lurrd" * (target_col - col - 2)
                 move_string += "l"
                 move_string += "urdlurrdluldrruld"
+                self.update_puzzle(move_string)
                 return move_string
 
     def solve_row1_tile(self, target_col):
@@ -340,17 +350,20 @@ class Puzzle:
         if row == 0:
             if col == target_col:
                 move_string += "u"
+                self.update_puzzle(move_string)
                 return move_string
             if col < target_col:
                 move_string += "u" + "l" * (target_col - col)
                 move_string += "drrul" * (target_col - col - 1)
                 move_string += "dru"
+                self.update_puzzle(move_string)
                 return move_string
         if row == 1:
             if col < target_col:
                 move_string += "l" * (target_col - col)
                 move_string += "urrdl" * (target_col - col - 1)
                 move_string += "ur"
+                self.update_puzzle(move_string)
                 return move_string
         
     ###########################################################
@@ -370,7 +383,7 @@ class Puzzle:
             move_string += "lurdlu"
         if row == 1 and col == 0:
             move_string += "lu"
-        print move_string
+        self.update_puzzle(move_string)
         return move_string
 
     def solve_puzzle(self):
@@ -438,27 +451,27 @@ class Puzzle:
             if start_pos[0] >= 2:
                 if start_pos[1] >= 1:
                     move_string += self.solve_interior_tile(start_pos[0], start_pos[1])
-                    self.update_puzzle(self.solve_interior_tile(start_pos[0], start_pos[1]))
+                    # self.update_puzzle(self.solve_interior_tile(start_pos[0], start_pos[1]))
                     start_pos[1] -= 1
                 elif start_pos[1] == 0:
                     move_string += self.solve_col0_tile(start_pos[0])
-                    self.update_puzzle(self.solve_col0_tile(start_pos[0]))
+                    # self.update_puzzle(self.solve_col0_tile(start_pos[0]))
                     start_pos[0] -= 1
                     start_pos[1] = self._width - 1
             elif start_pos[0] <= 1:
                 if start_pos[1] >= 2:
                     if start_pos[0] == 1:
                         move_string += self.solve_row1_tile(start_pos[1])
-                        self.update_puzzle(self.solve_row1_tile(start_pos[1]))
+                        # self.update_puzzle(self.solve_row1_tile(start_pos[1]))
                         start_pos[0] = 0
                     elif start_pos[0] == 0:
                         move_string += self.solve_row0_tile(start_pos[1])
-                        self.update_puzzle(self.solve_row0_tile(start_pos[1]))
+                        # self.update_puzzle(self.solve_row0_tile(start_pos[1]))
                         start_pos[0] = 1
                         start_pos[1] -= 1
                 elif start_pos[1] <= 1:
                     move_string += self.solve_2x2()
-                    self.update_puzzle(self.solve_2x2())
+                    # self.update_puzzle(self.solve_2x2())
                     start_pos = [0,0]
                         
         # move_string = self.solve_interior_tile(start_row, start_col)
@@ -469,6 +482,5 @@ class Puzzle:
         return move_string 
 
 # Start interactive simulation
-poc_fifteen_gui.FifteenGUI(Puzzle(3, 3))
-
+poc_fifteen_gui.FifteenGUI(Puzzle(5, 5))
 
