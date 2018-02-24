@@ -1,0 +1,46 @@
+Solution for Question 1 (4 pts)
+Image: http://storage.googleapis.com/codeskulptor-alg/citation_simpleplot_indegree.png
+
+Solution for Question 2 (3 pts)
+1. Is the expected value of the in-degree the same for each node in an ER graph? Please answer yes or no and include a short explanation for your answer.
+Answer: As noted in the Homework, the in-degree of an arbitrary node in a directed ER graph is binomially distributed. Therefore, the in-degree distribution for the entire graph must also be binomial.
+
+Here are two plots of the binomial distribution for n=50 and p=0.5. The left plot is in linear scale while the right plot is in log/log scale. Note that the points in the bump-shaped curve may be rather noisy if the number of trials used in the generating the plot is small.
+
+Image: http://storage.googleapis.com/codeskulptor-alg/binomial_matplotlib_standard.png
+
+Image: http://storage.googleapis.com/codeskulptor-alg/binomial_matplotlib_loglog.png
+
+
+
+Solution for Question 3 (2 pts)
+What is the number of nodes n in the desired DPA graph?
+The value of n is the number of papers in the citation graph, which is 27770. Since the text asked for a rough value, score values for n between 27000 and 28000 as being correct.
+
+Item b (1 pt) What is the value of m in the desired DPA graph?
+The citation graph has 352768 total edges and 27770 total nodes. So the average out-degree is approximately 12.7. Since the value of m must be an integer, the answer may be rounded either up of down to the nearest integer. So, either m=12 or m=13 is an acceptable answer.
+
+The answers m=14 and m=15 should also receive full credit since, in practice, the actual number of edges in the final DPA graph is often closer to 352768 for these values due to the fact that fewer than m edges are sometimes added during each iteration of the algorithm.
+
+Solution for Question 4 (3 pts)
+Below are correct plots for the in-degree distribution of a DPA graph of the appropriate size. The left plot was computed using matplotlib while the right plot was computed using simpleplot using a simulated log/log scale.
+
+Image: http://storage.googleapis.com/codeskulptor-alg/dpa_matplotlib_loglog.png
+
+Image: http://storage.googleapis.com/codeskulptor-alg/dpa_simpleplot_indegree.png
+
+Solution for Question 5 (3 pts)
+Item a (1 pt) Is the plot of the in-degree distribution for the DPA graph similar to that of the citation graph? Provide a short explanation of the similarities or differences. Focus on the various properties of the two plots as discussed in the class page on "Creating, formatting, and comparing plots."
+The plot of the in-degree distribution of the DPA graph is indeed similar to that of the citation graph. They agree on all of the items listed in item c for Question 1. In particular, the points in both plots are accurately approximated by a line with falling (negative) slope. In both cases, the points tend to scatter more as the fraction of points (papers) decreases.
+
+Which one of the three social phenomena listed above mimics the behavior of the DPA process? Provide a short explanation for your answer.
+The correct phenomenon is "The rich gets richer". In Algorithm DPA, a node with a higher degree (rich) has a higher probability of getting a new edge (richer). This process modeled by Algorithm DPA mimics the behavior of "The rich gets richer" model in which the wealthy have the means to more easily acquire new wealth.
+
+Historically, this answer has generated vigorous disagreement by a small number of students who have argued for "Hierarchical structure of networks" or "Six degrees of separation". Since the answer to this question is more subjective than usual, you should also give credit to answers that cite the "Hierarchical structure of networks" or "Six degrees of separation" as long as the answer provides an explanation for that choice.
+
+Could one of these phenomena explain the structure of the physics citation graph? Provide a short explanation for your answer.
+The "Rich get richer" phenomenon provides an explanation for the structure of the citation graph. Papers (nodes) that have lots of citations (incoming edges) are more visible and, therefore, more likely to draw new citations (incoming edges) due to their visibility. For this part of the question, only give credit for answers that cite "The rich get richer."
+
+Conclusion: In general, the in-degree distribution for citation graphs follows the power law which captures the statistical behavior of many types of phenomena. Distributions following the power law are well-approximated by an expression of the form kα where k is the free variable.
+
+Note that the in-degree distribution for the citation graphs follows the power law (with α<0) since the log/log plot is nearly linear. As observed in the class notes on "Logs and exponentials", the value for α corresponds to the negative slope of a line that approximates the points in the plot.
