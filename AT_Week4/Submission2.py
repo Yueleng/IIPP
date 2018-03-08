@@ -46,8 +46,10 @@ def cc_visited(ugraph):
     
     #main loop for calculation all connected components in undirectional graph
     while len(remaining) > 0:
-        node_i = random.choice(tuple(remaining)) # You have to change them to tuple in order to use random.choice
-        #node_i = random.sample(remaining, 1)[0] # return the list, that's why we have to use [0] 
+        node_i = random.choice(tuple(remaining)) 
+        # You have to change them to tuple or list in order to use random.choice
+        # node_i = random.sample(remaining, 1)[0] # return the list, that's why we have to use [0] 
+        
         component = bfs_visited(ugraph, node_i)
         cc.append(component)
         for node in component:
