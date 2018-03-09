@@ -9,7 +9,8 @@ Created on Tue Mar  6 22:07:24 2018
 # general imports
 from urllib.request import urlopen
 import random
-import time
+import sys
+import timeit
 import math
 
 #Desktop imports
@@ -168,9 +169,9 @@ def make_er_graph(num_nodes, p):
     """
     graph = {key: set([]) for key in range(num_nodes)}
     for node in range(num_nodes):
-        for to_node in range(num_nodes):
+        for to_node in range(node + 1, num_nodes):
             chance = random.random() #Return the next random floating point number in the range [0.0, 1.0).
-            if node != to_node and chance < p:
+            if chance < p:
                 graph[node].add(to_node)
                 graph[to_node].add(node)
     #print(graph)                
@@ -226,7 +227,7 @@ def question1(network, er, upa, order_func, order_label, filename):
     
     xs = range(N+1)
     plt.plot(xs, network_res, '-r', label = 'Network graph')
-    plt.plot(xs, er_res, '-b', label = 'ER-generated (p = 0.002)')
+    plt.plot(xs, er_res, '-b', label = 'ER-generated (p = 0.004)')
     plt.plot(xs, upa_res, '-g', label = 'UPA-generated (m = 3)')
     plt.title('Graph resilience (%s)' % order_label)
     plt.xlabel('Number of nodes removed')
@@ -237,13 +238,79 @@ def question1(network, er, upa, order_func, order_label, filename):
     print('Saved plot to %s' %filename)
     plt.show()
     
+if True: 
+    network = load_graph(NETWORK_URL)
+    er = make_er_graph(1239, 0.004)
+    upa = make_upa_graph(1239, 3)
     
-network = load_graph(NETWORK_URL)
-er = make_er_graph(1239, 0.002)
-upa = make_upa_graph(1239, 3)
+    question1(network, er, upa, random_order, 'random order', 'q1.png')
+    
 
-question1(network, er, upa, random_order, 'random order', 'q1.png')
+def fast_targeted_order(ugraph):
+    ugraph = copy_graph(ugraph)
+    N = len(ugraph)
+    degree_sets = [set([])] * N # Sao Cao Zuo
+    for node, neighbors in ugraph.items():
+        degree = len(neighbors)
+        degree_sets[degree].add(node)
+    order = []
+    
+    for k in range(N-1, -1, -1): # N-1, N-2, N-3, ..., 0
+        while degree_sets[k]: # Sao Cao Zuo
+            u = degree_sets[k].pop() # pop up an element we don't know. Since set data structure.
+            for neighbor in ugraph[u]:
+                d = len(ugraph[neighbor])
+                degree_sets[d].remove(neighbor)
+                degree_sets[d - 1].add(neighbor)
+                
+            order.append(u)
+            delete_node(ugraph, u)
+    
+    return order
 
+
+    
+def measure_targeted_order(n, m, func):
+    graph = make_upa_graph(n, m)
+    return timeit.timeit(lambda: func(graph), number = 1)
+    
+def question3(filename):
+    xs = range(10, 1000, 10)
+    m = 5
+    
+    ys_targeted = [measure_targeted_order(n, m, targeted_order) for n in xs]
+    ys_fast_targeted = [measure_targeted_order(n, m, fast_targeted_order) for n in xs]
+    
+    plt.plot(xs, ys_targeted, '-r', label = 'targeted_order')
+    plt.plot(xs, ys_fast_targeted, '-r', label = 'fast_targeted_order')
+    plt.title('Targeted order functions performance (desktup Python)')
+    plt.xlabel('Number of nodes in the graph')
+    plt.ylabel('Execution time')
+    plt.legend(loc = 'upper left')
+    plt.tight_layout()
+    plt.savefig(filename)
+    print('Saved plot to %s' % filename)
+    plt.show()
+
+if False:    
+    question3('q3.png')
+   
+
+
+def question4(filename):
+    network = load_graph(NETWORK_URL)
+    er = make_er_graph(1239, 0.004)
+    upa = make_upa_graph(1239, 3)
+    question1(network, er, upa, fast_targeted_order, 'fast_targeted_order', '%s' % filename)
+if True:    
+    question4('q4.png')
+    
+    
+    
+    
+    
+    
+    
     
     
     

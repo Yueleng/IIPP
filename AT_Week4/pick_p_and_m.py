@@ -117,15 +117,15 @@ def make_er_graph(num_nodes, p):
     """
     graph = {key: set([]) for key in range(num_nodes)}
     for node in range(num_nodes):
-        for to_node in range(num_nodes):
+        for to_node in range(node + 1, num_nodes):
             chance = random.random() #Return the next random floating point number in the range [0.0, 1.0).
-            if node != to_node and chance < p:
+            if chance < p:
                 graph[node].add(to_node)
                 graph[to_node].add(node)
     #print(graph)                
     return graph
 
-er = make_er_graph(1239, 0.002) # after choosing for 10 values. 
+er = make_er_graph(1239, 0.004) # after choosing for 10 values of p
 print("Loaded er graph with", len(er), "nodes")
 edges_er = num_of_edges(er)
 print('er edges are ', edges_er, '\n')
@@ -142,11 +142,7 @@ def make_upa_graph(n, m):
     
     return graph
 
-upa = make_upa_graph(1239, 3)
+upa = make_upa_graph(1239, 3) # after choosing for 10 values of m
 print("Loaded upa graph with", len(upa), "nodes")
 edges_upa = num_of_edges(upa)
 print('upa edges are ', edges_upa, '\n')
-    
-
-
-
