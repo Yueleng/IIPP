@@ -12,19 +12,20 @@ DESKTOP = True
 
 import math
 import random
-import urllib2
+# import urllib2
+from urllib.request import urlopen
 import alg_cluster
 
 # conditional imports
 if DESKTOP:
-    import alg_project3_solution      # desktop project solution
+    import alg_project3_solution  # desktop project solution
     import alg_clusters_matplotlib
 else:
-    #import userXX_XXXXXXXX as alg_project3_solution   # CodeSkulptor project solution
+    # import userXX_XXXXXXXX as alg_project3_solution   # CodeSkulptor project solution
     import alg_clusters_simplegui
     import codeskulptor
-    codeskulptor.set_timeout(30)
 
+    codeskulptor.set_timeout(30)
 
 ###################################################
 # Code to load data tables
@@ -32,11 +33,14 @@ else:
 # URLs for cancer risk data tables of various sizes
 # Numbers indicate number of counties in data table
 
-DIRECTORY = "http://commondatastorage.googleapis.com/codeskulptor-assets/"
-DATA_3108_URL = DIRECTORY + "data_clustering/unifiedCancerData_3108.csv"
-DATA_896_URL = DIRECTORY + "data_clustering/unifiedCancerData_896.csv"
-DATA_290_URL = DIRECTORY + "data_clustering/unifiedCancerData_290.csv"
-DATA_111_URL = DIRECTORY + "data_clustering/unifiedCancerData_111.csv"
+# DIRECTORY = "http://commondatastorage.googleapis.com/codeskulptor-assets/"
+
+# Note: Since we are using desktop version. We modified the DIRECTORY and the DATA_****_URL
+DIRECTORY = "./"
+DATA_3108_URL = DIRECTORY + "unifiedCancerData_3108.csv"
+DATA_896_URL = DIRECTORY + "unifiedCancerData_896.csv"
+DATA_290_URL = DIRECTORY + "unifiedCancerData_290.csv"
+DATA_111_URL = DIRECTORY + "unifiedCancerData_111.csv"
 
 
 def load_data_table(data_url):
@@ -44,13 +48,16 @@ def load_data_table(data_url):
     Import a table of county-based cancer risk data
     from a csv format file
     """
-    data_file = urllib2.urlopen(data_url)
+    # data_file = urlopen(data_url)
+    data_file = open(data_url)
     data = data_file.read()
     data_lines = data.split('\n')
-    print("Loaded", len(data_lines), "data points")
+    print("Loaded", len(data_lines), "data points")  # Note: print out how many lines are there in the file.
     data_tokens = [line.split(',') for line in data_lines]
-    return [[tokens[0], float(tokens[1]), float(tokens[2]), int(tokens[3]), float(tokens[4])] 
-            for tokens in data_tokens]
+    # Note: list of list.  [[1101, 720.2816, 440.4362, 223510, 5.70E-05],...,[11001	867.4704012	260.4609742	572059	7.70E-05]]
+
+    return [[tokens[0], float(tokens[1]), float(tokens[2]), int(tokens[3]), float(tokens[4])]
+            for tokens in data_tokens]  # data_type conversion, does not change the structure of the data_tokens
 
 
 ############################################################
@@ -64,22 +71,22 @@ def sequential_clustering(singleton_list, num_clusters):
     
     Note that method may return num_clusters or num_clusters + 1 final clusters
     """
-    
+
     cluster_list = []
     cluster_idx = 0
     total_clusters = len(singleton_list)
-    cluster_size = float(total_clusters)  / num_clusters
-    
+    cluster_size = float(total_clusters) / num_clusters   #Average cluster size per cluster
+
     for cluster_idx in range(len(singleton_list)):
         new_cluster = singleton_list[cluster_idx]
         if math.floor(cluster_idx / cluster_size) != \
-           math.floor((cluster_idx - 1) / cluster_size):
+                math.floor((cluster_idx - 1) / cluster_size):
             cluster_list.append(new_cluster)
         else:
             cluster_list[-1] = cluster_list[-1].merge_clusters(new_cluster)
-            
+
     return cluster_list
-                
+
 
 #####################################################################
 # Code to load cancer data, compute a clustering and 
@@ -94,27 +101,27 @@ def run_example():
     Set DESKTOP = True/False to use either matplotlib or simplegui
     """
     data_table = load_data_table(DATA_3108_URL)
-    
+
     singleton_list = []
     for line in data_table:
         singleton_list.append(alg_cluster.Cluster(set([line[0]]), line[1], line[2], line[3], line[4]))
-        
-    cluster_list = sequential_clustering(singleton_list, 15)    
+
+    cluster_list = sequential_clustering(singleton_list, 15)
     print("Displaying", len(cluster_list), "sequential clusters")
 
-    #cluster_list = alg_project3_solution.hierarchical_clustering(singleton_list, 9)
-    #print "Displaying", len(cluster_list), "hierarchical clusters"
+    # cluster_list = alg_project3_solution.hierarchical_clustering(singleton_list, 9)
+    # print "Displaying", len(cluster_list), "hierarchical clusters"
 
-    #cluster_list = alg_project3_solution.kmeans_clustering(singleton_list, 9, 5)   
-    #print "Displaying", len(cluster_list), "k-means clusters"
+    # cluster_list = alg_project3_solution.kmeans_clustering(singleton_list, 9, 5)
+    # print "Displaying", len(cluster_list), "k-means clusters"
 
-            
     # draw the clusters using matplotlib or simplegui
     if DESKTOP:
         alg_clusters_matplotlib.plot_clusters(data_table, cluster_list, False)
-        #alg_clusters_matplotlib.plot_clusters(data_table, cluster_list, True)  #add cluster centers
+        # alg_clusters_matplotlib.plot_clusters(data_table, cluster_list, True)  #add cluster centers
     else:
-        alg_clusters_simplegui.PlotClusters(data_table, cluster_list)   # use toggle in GUI to add cluster centers
+        alg_clusters_simplegui.PlotClusters(data_table, cluster_list)  # use toggle in GUI to add cluster centers
+
 
 def visualize(datafile, output, cluster_func):
     data_table = load_data_table(datafile)
@@ -127,27 +134,3 @@ def visualize(datafile, output, cluster_func):
 
 if __name__ == '__main__':
     run_example()
-
-
-
-
-
-    
-
-
-
-
-
-  
-        
-
-
-
-
-
-
-        
-
-
-
-

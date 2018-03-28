@@ -160,7 +160,7 @@ def closest_pair_strip(cluster_list, horiz_center, half_width):
     list_split = [idx for idx in vert_order if abs(cluster_list[idx].horiz_center() - horiz_center) < half_width]
     length = len(list_split)
     
-    #initialize the closest pair
+    # initialize the closest pair
     closest_pair = (float("inf"), -1 , -1)
     
     for idx_u in range(length - 1):
@@ -177,7 +177,7 @@ def closest_pair_strip(cluster_list, horiz_center, half_width):
 # Code for hierarchical clustering
 
 
-def hierarchical_clustering(cluster_list, num_clusters):
+def hierarchical_clustering(cluster_list, num_clusters, dfunc = None, trigger_set = None):
     """
     Compute a hierarchical clustering of a set of clusters
     Note: the function may mutate cluster_list
@@ -189,6 +189,9 @@ def hierarchical_clustering(cluster_list, num_clusters):
         current = fast_closest_pair(cluster_list)
         cluster_list[current[1]].merge_clusters(cluster_list[current[2]])
         cluster_list.pop(current[2])
+
+        if dfunc is not None and len(cluster_list) in trigger_set:
+            dfunc(cluster_list)
     return cluster_list
 
 
@@ -211,7 +214,7 @@ def kmeans_clustering(cluster_list, num_clusters, num_iterations):
     k_clusters = cluster_list_sorted[:num_clusters]
     
     for dummy_idx in range(num_iterations):
-        new_clusters = [alg_cluster.Cluster(set([]), 0, 0, 1, 0) for dummy_idx in range(num_clusters)]
+        new_clusters = [alg_cluster.Cluster(set([]), 0, 0, 1, 0) for dummy_index in range(num_clusters)]
         for idx_j in range(len(cluster_list)):
             current_dist = [cluster_list[idx_j].distance(k_clusters[idx_l]) for idx_l in range(num_clusters)]
             idx_l = min(range(len(current_dist)), key = current_dist.__getitem__)
