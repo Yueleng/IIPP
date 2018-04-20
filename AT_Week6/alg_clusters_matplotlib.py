@@ -25,7 +25,7 @@ def circle_area(pop):
     return math.pi * pop / (200.0 ** 2)
 
 
-def plot_clusters(data_table, cluster_list, draw_centers=True, output = None):
+def plot_clusters(data_table, cluster_list, draw_centers=True, output=None):
     """
     Create a plot of clusters of counties
     """

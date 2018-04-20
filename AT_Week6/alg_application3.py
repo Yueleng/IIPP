@@ -17,13 +17,18 @@ from alg_project3_viz import load_data_table
 
 
 def get_random_clusters(num_clusters):
-    def make(_):
+    # def make(_):
+    #     x = random() * 2 - 1
+    #     y = random() * 2 - 1
+    #     return Cluster(set(['0']), x, y, 1, 1)
+    #
+    # return map(make, range(num_clusters))
+    clusters = []
+    for dummy_idx in range(num_clusters):
         x = random() * 2 - 1
         y = random() * 2 - 1
-        return Cluster(set(['0']), x, y, 1, 1)
-
-    return map(make, range(num_clusters))
-
+        clusters.append(Cluster(set(['0']), x, y, 1, 1))
+    return clusters
 
 def question1(filename):
     xs = range(2, 201)
@@ -34,7 +39,7 @@ def question1(filename):
         ys_slow.append(timeit(lambda: slow_closest_pair(clusters), number=1))
 
     plt.plot(xs, ys_fast, '-r', label='fast_closest_pair')
-    plt.plot(xs, ys_fast, '-b', label='slow_closest_pair')
+    plt.plot(xs, ys_slow, '-b', label='slow_closest_pair')
     plt.title('Running time of two closest_pair functions (desktop Python)')
     plt.xlabel('Number of initial clusters')
     plt.ylabel('Running time, seconds')
@@ -73,9 +78,20 @@ def question6(filename):
     print('Distortion in question6, kmeans = %f (%s)' % (dist, dist))
 
 
+
+
+def load_as_list(filename):
+    clusters = []
+    with open(filename) as f:
+        for line in f.readlines():
+            fips, x, y, pop, risk = line.split(',')
+            clusters.append(Cluster(set([fips]), float(x), float(y), int(pop), float(risk)))
+    return clusters
+
+
 def question10(data, filename):
     table = load_data_table(data)
-    clusters = Cluster.load_as_list(data)
+    clusters = load_as_list(data)
     xs = range(6, 21)
     ys_hier = []
 
@@ -84,6 +100,7 @@ def question10(data, filename):
 
     hierarchical_clustering(clusters, 6, dist, set(xs))
     ys_hier.reverse()
+    clusters = load_as_list(data)
     ys_kmeans = [distortion(kmeans_clustering(clusters, x, 5), table) for x in xs]
 
     plt.cla()
@@ -92,22 +109,23 @@ def question10(data, filename):
     plt.title('Clustering distortion (%s)' % data)
     plt.xlabel('Number of output clusters')
     plt.ylabel('Distortion')
-    plt.legend(loc='uppder right')
+    plt.legend(loc='upper right')
     plt.tight_layout()
     plt.savefig(filename)
     print('Saved plot to %s' % filename)
 
 
-def main():
-    # question1('pic/question1.png')
-    # question2('pic/question2.png')
-    # question3('pic/question3.png')
-    # question5('pic/question5.png')
-    # question6('pic/question6.png')
-    question10('./unifiedCancerData_111.csv', 'pic/question10-111.png')
-    question10('./unifiedCancerData_290.csv', 'pic/question10-290.png')
-    question10('./unifiedCancerData_896.csv', 'pic/question10-896.png')
 
+
+def main():
+    # question1('question1.png')
+    # question2('question2.png')
+    # question3('question3.png')
+    # question5('question5.png')
+    # question6('question6.png')
+    question10('./unifiedCancerData_111.csv', 'question10-111.png')
+    question10('./unifiedCancerData_290.csv', 'question10-290.png')
+    question10('./unifiedCancerData_896.csv', 'question10-896.png')
 
 if __name__ == '__main__':
     main()

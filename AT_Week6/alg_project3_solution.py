@@ -52,7 +52,7 @@ def slow_closest_pair(cluster_list):
     
     for index_u in range(len(cluster_list)): # go through each index
         for index_v in range(index_u + 1, len(cluster_list)): # each comparison index
-            if index_u != index_v: # make sure indeces are not the same
+            if index_u != index_v: # make sure indices are not the same
                 distance_pair = pair_distance(cluster_list, index_u, index_v) # compute distance based on cluster index
                 #if abs(distance_pair[0] - current_dist) < epsilon:  # test if they are equal
                 #    closest_pair.append(distance_pair)# assign new distance and cluster indices
@@ -80,7 +80,7 @@ def fast_helper(cluster_list, horiz_order, vert_order):
         return (closest_pair[0], horiz_order[closest_pair[1]], horiz_order[closest_pair[2]])
     else:
         #split lists into two halves
-        idx_m = len(horiz_order) / 2 #set idx_m as the splitting index
+        idx_m = len(horiz_order) // 2 #set idx_m as the splitting index
         horiz_left, horiz_right = horiz_order[:idx_m], horiz_order[idx_m:]
         
         # split vertical elements in half to match horizontal
@@ -221,4 +221,5 @@ def kmeans_clustering(cluster_list, num_clusters, num_iterations):
             new_clusters[idx_l].merge_clusters(cluster_list[idx_j])
         k_clusters = new_clusters[:]
     return k_clusters
+
 

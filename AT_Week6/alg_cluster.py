@@ -137,3 +137,5 @@ class Cluster:
             singleton_distance = self.distance(singleton_cluster)
             total_error += (singleton_distance ** 2) * singleton_cluster.total_population()
         return total_error
+
+

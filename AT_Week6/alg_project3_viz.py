@@ -6,15 +6,16 @@ Note that you must download the file
 http://www.codeskulptor.org/#alg_clusters_matplotlib.py
 to use the matplotlib version of this code
 """
-
-# Flavor of Python - desktop or CodeSkulptor
-DESKTOP = True
-
 import math
 import random
 # import urllib2
 from urllib.request import urlopen
 import alg_cluster
+
+# Flavor of Python - desktop or CodeSkulptor
+DESKTOP = True
+
+
 
 # conditional imports
 if DESKTOP:
@@ -77,6 +78,8 @@ def sequential_clustering(singleton_list, num_clusters):
     total_clusters = len(singleton_list)
     cluster_size = float(total_clusters) / num_clusters   #Average cluster size per cluster
 
+    # partitioning the table into clusters based on its ordering say
+    # partition 1,2,3,4,5,6,7,8 into 1,2,3,4 and 5,6,7,8 if cluster_size = 4
     for cluster_idx in range(len(singleton_list)):
         new_cluster = singleton_list[cluster_idx]
         if math.floor(cluster_idx / cluster_size) != \
@@ -125,9 +128,10 @@ def run_example():
 
 def visualize(datafile, output, cluster_func):
     data_table = load_data_table(datafile)
-    clusters = [alg_cluster.Cluster(set(x[0]), x[1], x[2], x[3], x[4]) for x in data_table]
+    clusters = [alg_cluster.Cluster(set([x[0]]), x[1], x[2], x[3], x[4]) for x in data_table]
     clusters = cluster_func(clusters)
     print("Displaying", len(clusters), "clusters")
+
     alg_clusters_matplotlib.plot_clusters(data_table, clusters, True, output)
     return clusters
 
